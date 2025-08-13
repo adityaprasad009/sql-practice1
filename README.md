@@ -1,22 +1,38 @@
-Create Students table
-CREATE TABLE Students (
-    student_id INT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    dob DATE NOT NULL
+DROP TABLE IF EXISTS Courses;
+DROP TABLE IF EXISTS Departments;
+CREATE TABLE Departments (
+dept_id INT PRIMARY KEY,
+dept_name VARCHAR(100) UNIQUE NOT NULL
 );
 
--- Create Courses table
 CREATE TABLE Courses (
-    course_id INT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL
+course_id INT PRIMARY KEY,
+course_title VARCHAR(100) NOT NULL,
+dept_id INT,
+FOREIGN KEY (dept_id) REFERENCES Departments(dept_id)
 );
+INSERT INTO Departments (dept_id, dept_name) VALUES
+(1, 'Computer Science'),
+(2, 'Electronics'),
+(3, 'Mechanical');
 
--- Create Enrollments table (Many-to-Many relationship with extra data)
-CREATE TABLE Enrollments (
-    enroll_id INT PRIMARY KEY,
-    student_id INT NOT NULL,
-    course_id INT NOT NULL,
-    grade VARCHAR(2),
-    FOREIGN KEY (student_id) REFERENCES Students(student_id),
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
+INSERT INTO Courses (course_id, course_title, dept_id) VALUES
+(101, 'DBMS', 1),
+(102, 'Operating Systems', 1),
+(103, 'Computer Networks', 1),
+(104, 'Digital Circuits', 2),
+(105, 'Microprocessors', 2),
+(106, 'Thermodynamics', 3);
+
+SELECT dept_name
+FROM Departments
+WHERE dept_id IN (
+SELECT dept_id
+FROM Courses
+GROUP BY dept_id
+HAVING COUNT(course_id) > 2
 );
+SELECT* FROM Courses;
+SELECT* FROM Departments;
+
+GRANT SELECT ON Courses TO 'viewer_user';
