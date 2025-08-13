@@ -35,4 +35,4 @@ HAVING COUNT(course_id) > 2
 SELECT* FROM Courses;
 SELECT* FROM Departments;
 
-GRANT SELECT ON Courses TO 'viewer_user';
+
